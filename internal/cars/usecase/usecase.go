@@ -4,12 +4,13 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"helloWRLDs/bookings/internal/cars/domain"
+	"fmt"
 	repo "helloWRLDs/bookings/internal/cars/repository"
+	"helloWRLDs/bookings/pkg/types"
 )
 
 type CarsUseCase interface {
-	GetCars(ctx context.Context) ([]domain.Car, error)
+	GetCars(ctx context.Context) (types.PaginationResponse, error)
 }
 
 type CarsUseCaseImpl struct {
@@ -22,20 +23,35 @@ func NewUseCase(db *sql.DB) *CarsUseCaseImpl {
 	}
 }
 
-func (u *CarsUseCaseImpl) GetCars(ctx context.Context) ([]domain.Car, error) {
-
+func (u *CarsUseCaseImpl) GetCars(ctx context.Context) (types.PaginationResponse, error) {
+	// Get vals from ctx
 	limit, ok := ctx.Value("limit").(int)
 	if !ok {
-		return nil, errors.New("query error")
+		return types.PaginationResponse{}, errors.New("query error")
 	}
 	offset, ok := ctx.Value("offset").(int)
 	if !ok {
-		return nil, errors.New("query error")
+		return types.PaginationResponse{}, errors.New("query error")
+	}
+	url, ok := ctx.Value("url").(string)
+	if !ok {
+		return types.PaginationResponse{}, errors.New("query error")
 	}
 
+	// Get data from database
 	cars, err := u.repo.GetAll(limit, offset)
 	if err != nil {
-		return nil, err
+		return types.PaginationResponse{}, err
 	}
-	return cars, nil
+
+	// Set the response
+	var response types.PaginationResponse
+	response.Content = cars
+	if offset < u.repo.Length() {
+		response.Next = fmt.Sprintf("%s?limit=%d&offset=%d", url, limit, limit+offset)
+	}
+	if offset >= limit {
+		response.Prev = fmt.Sprintf("%s?limit=%d&offset=%d", url, limit, offset-limit)
+	}
+	return response, nil
 }

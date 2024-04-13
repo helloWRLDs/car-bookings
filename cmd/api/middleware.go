@@ -10,7 +10,7 @@ func LogRequest(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		logger.WithFields(logger.Fields{
 			"method": r.Method,
-			"url":    r.URL.Path,
+			"url":    r.URL.String(),
 		}).Info("received request")
 		next.ServeHTTP(w, r)
 	})

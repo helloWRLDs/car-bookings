@@ -24,14 +24,17 @@ func (d *CarsDeliveryImpl) GetCarsController(w http.ResponseWriter, r *http.Requ
 	if offset < 0 {
 		offset = 0
 	}
-	ctx := context.WithValue(r.Context(), "limit", limit)
+	ctx := r.Context()
+	ctx = context.WithValue(ctx, "limit", limit)
 	ctx = context.WithValue(ctx, "offset", offset)
-	cars, err := d.uc.GetCars(ctx)
+	ctx = context.WithValue(ctx, "url", fmt.Sprintf("http://%s%s", r.Host, r.URL.Path))
+
+	response, err := d.uc.GetCars(ctx)
 	if err != nil {
 		web.EncodeJson(w, 500, types.Response{Message: err.Error()})
 		return
 	}
-	web.EncodeJson(w, 200, cars)
+	web.EncodeJson(w, 200, response)
 }
 
 func (d *CarsDeliveryImpl) GetCarController(w http.ResponseWriter, r *http.Request) {

@@ -12,6 +12,7 @@ type CarsRepository interface {
 	Insert(car domain.Car) (int64, error)
 	GetAll(limit int, offset int) ([]domain.Car, error)
 	Delete(id int64) error
+	Length() int
 }
 
 type CarsRepositoryImpl struct {
@@ -22,6 +23,15 @@ func NewCarsRepository(db *sql.DB) *CarsRepositoryImpl {
 	return &CarsRepositoryImpl{
 		Db: db,
 	}
+}
+
+func (r *CarsRepositoryImpl) Length() int {
+	var length int
+	stmt := `SELECT COUNT(*) FROM cars`
+	if err := r.Db.QueryRow(stmt).Scan(&length); err != nil {
+		return 0
+	}
+	return length
 }
 
 func (r *CarsRepositoryImpl) Get(id int64) (domain.Car, error) {
