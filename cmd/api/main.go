@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	cars "helloWRLDs/bookings/internal/cars/delivery/http"
 	config "helloWRLDs/bookings/pkg/configs"
@@ -8,6 +9,9 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"github.com/go-chi/chi"
 	"github.com/sirupsen/logrus"
@@ -52,8 +56,24 @@ func main() {
 		ErrorLog: log.New(w, "", 0),
 	}
 
-	logger.WithField("addr", cfg.Addr).Info("server started")
-	if err := srv.ListenAndServe(); err != nil {
-		os.Exit(1)
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, os.Interrupt, syscall.SIGTERM)
+
+	go func() {
+		logger.WithField("addr", cfg.Addr).Info("server started")
+		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			logger.Fatalf("ListenAndServe(): %v", err)
+		}
+	}()
+
+	<-quit
+	logger.Println("Server is shutting down...")
+
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+
+	if err := srv.Shutdown(ctx); err != nil {
+		logger.Fatalf("Server forced to shutdown: %v", err)
 	}
+	logger.Info("Server exiting")
 }

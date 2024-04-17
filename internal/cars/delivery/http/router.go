@@ -11,6 +11,7 @@ func (d *CarsDeliveryImpl) Routes() chi.Router {
 	r.Get("/{id}", d.GetCarController)
 	r.Post("/", d.AddCarController)
 	r.Delete("/{id}", d.DeleteCarController)
+	r.Put("/{id}", d.UpdateCarController)
 
 	return r
 }

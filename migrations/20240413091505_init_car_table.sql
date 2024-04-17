@@ -5,8 +5,11 @@ CREATE TABLE IF NOT EXISTS cars (
     vendor VARCHAR(30) NOT NULL,
     model VARCHAR(60) NOT NULL,
     year SMALLINT NOT NULL,
-    isAvailable BOOLEAN,
-    body VARCHAR(30) NOT NULL
+    is_available BOOLEAN,
+    body VARCHAR(30) NOT NULL,
+    engine_capacity FLOAT NOT NULL,
+    mileage INT NOT NULL,
+    color VARCHAR(30) NOT NULL
 );
 -- +goose StatementEnd
 
