@@ -4,8 +4,6 @@ import (
 	"database/sql"
 	"fmt"
 	dm "helloWRLDs/bookings/internal/cars/domain"
-
-	logger "github.com/sirupsen/logrus"
 )
 
 type CarsRepositoryImpl struct {
@@ -92,7 +90,6 @@ func (r *CarsRepositoryImpl) GetAll(filters dm.Filters) ([]dm.Car, error) {
 	stmt := fmt.Sprintf(`SELECT * FROM cars WHERE %s LIKE '%%%s%%' ORDER BY $1 %s LIMIT $2 OFFSET $3`, filters.FilterType, filters.Filter, filters.Order)
 	rows, err := r.DB.Query(stmt, filters.Sort, filters.Limit, filters.Offset)
 	if err != nil {
-		logger.Error(err)
 		return nil, err
 	}
 	defer rows.Close()

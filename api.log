@@ -1,0 +1,25 @@
+@time="2024-04-17 14:39:56" lvl=info msg="db connection established" dsn="postgres@localhost:5432/mydb"
+@time="2024-04-17 14:39:56" lvl=info msg="server started" addr=":9090"
+@time="2024-04-17 14:40:44" lvl=info msg="Server is shutting down..."
+@time="2024-04-17 14:40:44" lvl=info msg="Server exiting"
+@time="2024-04-17 14:41:09" lvl=error msg="db connection errordial tcp 127.0.0.1:5432: connect: connection refused" dsn="postgres@localhost:5432/mydb"
+@time="2024-04-17 14:43:45" lvl=error msg="db connection error" dsn="postgres@localhost:5432/mydb" err="dial tcp 127.0.0.1:5432: connect: connection refused"
+@time="2024-04-17 14:45:56" lvl=fatal msg="db connection error" dsn="postgres@localhost:5432/mydb" err="dial tcp 127.0.0.1:5432: connect: connection refused"
+@time="2024-04-17 14:56:36" lvl=info msg="db conn ok" dsn="postgres@localhost:5432/mydb"
+@time="2024-04-17 14:56:36" lvl=info msg="server started" addr=":9090"
+@time="2024-04-17 14:56:40" lvl=info msg="received request" method=GET url=/api/v1/cars/2
+@time="2024-04-17 14:56:53" lvl=info msg="received request" method=GET url=/api/v1/cars/2
+@time="2024-04-17 14:57:23" lvl=info msg="received request" method=GET url=/api/v1/cars/2
+@time="2024-04-17 14:57:26" lvl=info msg="received request" method=GET url=/api/v1/cars/4
+@time="2024-04-17 14:57:26" lvl=error msg="sql query error" err="pq: relation \"car\" does not exist" query="SELECT * FROM car WHERE id=$1"
+@time="2024-04-17 14:57:26" lvl=error msg="pq: relation \"car\" does not exist"
+@time="2024-04-17 15:01:07" lvl=info msg="db conn ok" dsn="postgres@localhost:5432/mydb"
+@time="2024-04-17 15:01:07" lvl=info msg="server started" addr=":9090"
+@time="2024-04-17 15:01:12" lvl=info msg="Server is shutting down..."
+@time="2024-04-17 15:01:12" lvl=info msg="Server exiting"
+@time="2024-04-17 15:01:27" lvl=info msg="db conn ok" dsn="postgres@localhost:5432/mydb"
+@time="2024-04-17 15:01:27" lvl=info msg="server started" addr=":9090"
+@time="2024-04-17 15:01:32" lvl=info msg="received request" method=GET url=/api/v1/cars/4
+@time="2024-04-17 15:01:32" lvl=error msg="SQL Query Error" err="pq: relation \"car\" does not exist"
+@time="2024-04-17 15:05:32" lvl=info msg="Server is shutting down..."
+@time="2024-04-17 15:05:32" lvl=info msg="Server exiting"

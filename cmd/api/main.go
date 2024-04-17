@@ -30,20 +30,28 @@ func init() {
 			logrus.FieldKeyLevel: "lvl",
 		},
 	})
+	logFile, err := os.OpenFile("api.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	if err != nil {
+		log.Fatalf("Failed to open log file: %v", err)
+	}
+	// logger.SetOutput(os.Stdout)
+	logger.SetOutput(logFile)
 }
 
 func main() {
-	logger.SetOutput(os.Stdout)
 	cfg := config.LoadAppConfig()
 	w := logger.New().WriterLevel(logger.ErrorLevel)
 	defer w.Close()
 
 	db, err := pg.Open(cfg.Db)
 	if err != nil {
-		logger.Error("db connection error", err)
+		logger.WithFields(logger.Fields{
+			"err": err.Error(),
+			"dsn": fmt.Sprintf("%s@%s:%s/%s", cfg.Db.Type, cfg.Db.Host, cfg.Db.Port, cfg.Db.Name),
+		}).Fatal("db conn error")
 		os.Exit(1)
 	}
-	logger.WithField("dsn", fmt.Sprintf("%s@%s:%s/%s", cfg.Db.Type, cfg.Db.Host, cfg.Db.Port, cfg.Db.Name)).Info("db connection established")
+	logger.WithField("dsn", fmt.Sprintf("%s@%s:%s/%s", cfg.Db.Type, cfg.Db.Host, cfg.Db.Port, cfg.Db.Name)).Info("db conn ok")
 
 	carsDlvr := cars.NewCarsDelivery(db)
 

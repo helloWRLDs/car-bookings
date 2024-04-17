@@ -35,9 +35,9 @@ func (d *CarsDeliveryImpl) GetCarsController(w http.ResponseWriter, r *http.Requ
 	filters := dm.ExtractFilters(r)
 	ctx.Data["url"] = fmt.Sprintf("http://%s%s", r.Host, r.URL.Path)
 
-	response, err := d.uc.GetCars(ctx, filters)
-	if err != nil {
-		web.EncodeJson(w, 500, resp.Message{})
+	response, error := d.uc.GetCars(ctx, filters)
+	if error != nil {
+		web.EncodeJson(w, error.Code(), resp.Message{Message: error.Error()})
 		return
 	}
 	web.EncodeJson(w, 200, response)

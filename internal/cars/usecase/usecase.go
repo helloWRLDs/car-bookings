@@ -29,18 +29,20 @@ func (u *CarsUseCaseImpl) UpdateCar(ctx context.Context, id int, car *dm.Car) (*
 	}
 	updatedCar, err := u.repo.Update(id, car)
 	if err != nil {
-		return nil, types.NewErr(err.Error(), 500)
+		logger.WithField("err", err.Error()).Error("SQL Query Error")
+		return nil, types.NewErr("internal server error", 500)
 	}
 	return updatedCar, nil
 }
 
 func (u *CarsUseCaseImpl) InsertCar(ctx context.Context, car *dm.Car) (int, *types.Error) {
 	if err := car.Validate(); err != nil {
-		return 0, types.NewErr(err.Error(), 403)
+		return 0, types.NewErr("invalid data format", 403)
 	}
 	id, error := u.repo.Insert(car)
 	if error != nil {
-		return 0, types.NewErr(error.Error(), 500)
+		logger.WithField("err", error.Error()).Error("SQL Query Error")
+		return 0, types.NewErr("internal server error", 500)
 	}
 	return id, nil
 }
@@ -51,19 +53,20 @@ func (u *CarsUseCaseImpl) GetCar(ctx context.Context, id int) (*dm.Car, *types.E
 	}
 	car, err := u.repo.Get(id)
 	if err != nil {
-		logger.Error(err.Error())
-		return nil, types.NewErr(err.Error(), 500)
+		logger.WithField("err", err.Error()).Error("SQL Query Error")
+		return nil, types.NewErr("internal server error", 500)
 	}
 	return &car, nil
 }
 
-func (u *CarsUseCaseImpl) GetCars(ctx ctx.Context, filters dm.Filters) (resp.Pagination, error) {
+func (u *CarsUseCaseImpl) GetCars(ctx ctx.Context, filters dm.Filters) (*resp.Pagination, *types.Error) {
 	cars, err := u.repo.GetAll(filters)
 	if err != nil {
-		return resp.Pagination{}, err
+		logger.WithField("err", err.Error()).Error("SQL Query Error")
+		return nil, types.NewErr("internal server error", 500)
 	}
 
-	var response resp.Pagination
+	response := &resp.Pagination{}
 	response.Content = cars
 	if filters.Offset < u.repo.Length() {
 		response.Next = fmt.Sprintf("%s?limit=%d&offset=%d", ctx.Data["url"], filters.Limit, filters.Limit+filters.Offset)
@@ -84,7 +87,8 @@ func (u *CarsUseCaseImpl) DeleteCar(ctx context.Context, id int) *types.Error {
 		return types.NewErr(fmt.Sprintf("object with id=%d not found", id), 404)
 	}
 	if err := u.repo.Delete(id); err != nil {
-		return types.NewErr(err.Error(), 500)
+		logger.WithField("err", err.Error()).Error("SQL Query Error")
+		return types.NewErr("internal server error", 500)
 	}
 	return nil
 }

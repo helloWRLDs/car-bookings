@@ -1,7 +1,7 @@
 package main
 
 import (
-	rsp "helloWRLDs/bookings/pkg/types/responses"
+	resp "helloWRLDs/bookings/pkg/types/responses"
 	"helloWRLDs/bookings/pkg/web"
 	"net/http"
 
@@ -37,7 +37,7 @@ func SecureHeaders(next http.Handler) http.Handler {
 func RateLimitter(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if !limitter.Allow() {
-			web.EncodeJson(w, 403, rsp.Message{Message: "too many requests"})
+			web.EncodeJson(w, 403, resp.Message{Message: "too many requests"})
 			return
 		}
 		next.ServeHTTP(w, r)
