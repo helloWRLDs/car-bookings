@@ -4,11 +4,13 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"helloWRLDs/bookings/internal/cars/domain"
+	dm "helloWRLDs/bookings/internal/cars/domain"
 	repo "helloWRLDs/bookings/internal/cars/repository"
 	"helloWRLDs/bookings/pkg/types"
 	ctx "helloWRLDs/bookings/pkg/types/context"
-	rsp "helloWRLDs/bookings/pkg/types/responses"
+	resp "helloWRLDs/bookings/pkg/types/responses"
+
+	logger "github.com/sirupsen/logrus"
 )
 
 type CarsUseCaseImpl struct {
@@ -21,7 +23,7 @@ func NewUseCase(db *sql.DB) *CarsUseCaseImpl {
 	}
 }
 
-func (u *CarsUseCaseImpl) UpdateCar(ctx context.Context, id int, car *domain.Car) (*domain.Car, *types.Error) {
+func (u *CarsUseCaseImpl) UpdateCar(ctx context.Context, id int, car *dm.Car) (*dm.Car, *types.Error) {
 	if !u.repo.Exists(id) {
 		return nil, types.NewErr(fmt.Sprintf("object with id=%d does not exist", id), 404)
 	}
@@ -32,7 +34,7 @@ func (u *CarsUseCaseImpl) UpdateCar(ctx context.Context, id int, car *domain.Car
 	return updatedCar, nil
 }
 
-func (u *CarsUseCaseImpl) InsertCar(ctx context.Context, car *domain.Car) (int, *types.Error) {
+func (u *CarsUseCaseImpl) InsertCar(ctx context.Context, car *dm.Car) (int, *types.Error) {
 	if err := car.Validate(); err != nil {
 		return 0, types.NewErr(err.Error(), 403)
 	}
@@ -43,26 +45,25 @@ func (u *CarsUseCaseImpl) InsertCar(ctx context.Context, car *domain.Car) (int, 
 	return id, nil
 }
 
-func (u *CarsUseCaseImpl) GetCar(ctx context.Context, id int) (*domain.Car, *types.Error) {
+func (u *CarsUseCaseImpl) GetCar(ctx context.Context, id int) (*dm.Car, *types.Error) {
 	if !u.repo.Exists(id) {
 		return nil, types.NewErr(fmt.Sprintf("object with id=%d not found", id), 404)
 	}
 	car, err := u.repo.Get(id)
 	if err != nil {
+		logger.Error(err.Error())
 		return nil, types.NewErr(err.Error(), 500)
 	}
 	return &car, nil
 }
 
-func (u *CarsUseCaseImpl) GetCars(ctx ctx.Context, filters domain.Filters) (rsp.Pagination, error) {
-	// Get data from database
+func (u *CarsUseCaseImpl) GetCars(ctx ctx.Context, filters dm.Filters) (resp.Pagination, error) {
 	cars, err := u.repo.GetAll(filters)
 	if err != nil {
-		return rsp.Pagination{}, err
+		return resp.Pagination{}, err
 	}
 
-	// Set the response
-	var response rsp.Pagination
+	var response resp.Pagination
 	response.Content = cars
 	if filters.Offset < u.repo.Length() {
 		response.Next = fmt.Sprintf("%s?limit=%d&offset=%d", ctx.Data["url"], filters.Limit, filters.Limit+filters.Offset)

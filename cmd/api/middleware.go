@@ -1,10 +1,16 @@
 package main
 
 import (
+	rsp "helloWRLDs/bookings/pkg/types/responses"
+	"helloWRLDs/bookings/pkg/web"
 	"net/http"
+
+	"golang.org/x/time/rate"
 
 	logger "github.com/sirupsen/logrus"
 )
+
+var limitter = rate.NewLimiter(1, 3)
 
 func LogRequest(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -24,6 +30,16 @@ func SecureHeaders(next http.Handler) http.Handler {
 		w.Header().Set("X-Content-Type-Options", "nosniff")
 		w.Header().Set("X-Frame-Options", "deny")
 		w.Header().Set("X-XSS-Protection", "0")
+		next.ServeHTTP(w, r)
+	})
+}
+
+func RateLimitter(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if !limitter.Allow() {
+			web.EncodeJson(w, 403, rsp.Message{Message: "too many requests"})
+			return
+		}
 		next.ServeHTTP(w, r)
 	})
 }

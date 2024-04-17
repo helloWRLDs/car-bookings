@@ -1,7 +1,6 @@
 package domain
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -30,7 +29,7 @@ func ExtractFilters(r *http.Request) Filters {
 	limit, _ := strconv.Atoi(r.URL.Query().Get("limit"))
 	offset, _ := strconv.Atoi(r.URL.Query().Get("offset"))
 	sort := r.URL.Query().Get("sort")
-	order := r.URL.Query().Get("order")
+	order := strings.ToUpper(r.URL.Query().Get("order"))
 	if limit <= 0 {
 		limit = 10
 	}
@@ -40,9 +39,7 @@ func ExtractFilters(r *http.Request) Filters {
 	if !validFields[sort] {
 		sort = "id"
 	}
-	if order == "asc" || order == "desc" {
-		order = strings.ToUpper(order)
-	} else {
+	if order != "ASC" && order != "DESC" {
 		order = "ASC"
 	}
 	filters := Filters{
@@ -57,9 +54,7 @@ func ExtractFilters(r *http.Request) Filters {
 		if r.URL.Query().Get(key) != "" {
 			filters.FilterType = key
 			filters.Filter = r.URL.Query().Get(key)
-			break
 		}
 	}
-	fmt.Println(filters)
 	return filters
 }

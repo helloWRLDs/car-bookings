@@ -5,7 +5,8 @@ import (
 	"fmt"
 	cars "helloWRLDs/bookings/internal/cars/delivery/http"
 	config "helloWRLDs/bookings/pkg/configs"
-	"helloWRLDs/bookings/pkg/datastore/postgresql"
+	pg "helloWRLDs/bookings/pkg/datastore/postgresql"
+
 	"log"
 	"net/http"
 	"os"
@@ -32,11 +33,12 @@ func init() {
 }
 
 func main() {
+	logger.SetOutput(os.Stdout)
 	cfg := config.LoadAppConfig()
 	w := logger.New().WriterLevel(logger.ErrorLevel)
 	defer w.Close()
 
-	db, err := postgresql.Open(cfg.Db)
+	db, err := pg.Open(cfg.Db)
 	if err != nil {
 		logger.Error("db connection error", err)
 		os.Exit(1)

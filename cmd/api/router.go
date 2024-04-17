@@ -8,7 +8,7 @@ import (
 
 func initRouter() chi.Router {
 	router := chi.NewRouter()
-	router.Use(LogRequest, SecureHeaders)
+	router.Use(LogRequest, SecureHeaders, RateLimitter)
 	router.Get("/ping", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("pong"))
 	})
