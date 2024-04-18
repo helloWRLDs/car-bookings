@@ -59,7 +59,7 @@ func (u *CarsUseCaseImpl) GetCar(ctx context.Context, id int) (*dm.Car, *errs.Er
 	return &car, nil
 }
 
-func (u *CarsUseCaseImpl) GetCars(ctx ctx.Context, filters dm.Filters) (*resp.Pagination, *errs.Error) {
+func (u *CarsUseCaseImpl) GetCars(ctx ctx.Context, filters *dm.Filters) (*resp.Pagination, *errs.Error) {
 	cars, err := u.repo.GetAll(filters)
 	if err != nil {
 		logger.WithField("err", err.Error()).Error("SQL Query Error")

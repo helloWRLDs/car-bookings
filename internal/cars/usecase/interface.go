@@ -9,7 +9,7 @@ import (
 )
 
 type CarsUseCase interface {
-	GetCars(ctx ctx.Context, filters dm.Filters) (*rsp.Pagination, *errs.Error)
+	GetCars(ctx ctx.Context, filters *dm.Filters) (*rsp.Pagination, *errs.Error)
 	GetCar(ctx context.Context, id int) (*dm.Car, *errs.Error)
 	InsertCar(ctx context.Context, car *dm.Car) (int, *errs.Error)
 	DeleteCar(ctx context.Context, id int) *errs.Error

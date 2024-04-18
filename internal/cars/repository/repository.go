@@ -84,11 +84,10 @@ func (r *CarsRepositoryImpl) Insert(c *dm.Car) (int, error) {
 	return insertedId, nil
 }
 
-func (r *CarsRepositoryImpl) GetAll(filters dm.Filters) ([]dm.Car, error) {
-	fmt.Println(filters.Order)
+func (r *CarsRepositoryImpl) GetAll(filters *dm.Filters) ([]dm.Car, error) {
 	var cars []dm.Car
-	stmt := fmt.Sprintf(`SELECT * FROM cars WHERE %s LIKE '%%%s%%' ORDER BY $1 %s LIMIT $2 OFFSET $3`, filters.FilterType, filters.Filter, filters.Order)
-	rows, err := r.DB.Query(stmt, filters.Sort, filters.Limit, filters.Offset)
+	stmt := fmt.Sprintf(`SELECT * FROM cars WHERE %s LIKE %s ORDER BY %s %s LIMIT $1 OFFSET $2`, filters.FilterType, filters.Filter, filters.Sort, filters.Order)
+	rows, err := r.DB.Query(stmt, filters.Limit, filters.Offset)
 	if err != nil {
 		return nil, err
 	}
