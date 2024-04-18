@@ -35,7 +35,7 @@ func (c *Car) Validate() error {
 		return fmt.Errorf("model field cannot be empty")
 	}
 	if c.Year < 1900 && c.Year > 2024 {
-		return fmt.Errorf("vendor field cannot be empty or year is inapproptiate")
+		return fmt.Errorf("unappropiate year")
 	}
 	return nil
 }

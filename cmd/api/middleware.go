@@ -1,8 +1,8 @@
 package main
 
 import (
-	resp "helloWRLDs/bookings/pkg/types/responses"
-	"helloWRLDs/bookings/pkg/web"
+	enc "helloWRLDs/bookings/pkg/web/encoders"
+	errs "helloWRLDs/bookings/pkg/web/errors"
 	"net/http"
 
 	"golang.org/x/time/rate"
@@ -37,7 +37,7 @@ func SecureHeaders(next http.Handler) http.Handler {
 func RateLimitter(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if !limitter.Allow() {
-			web.EncodeJson(w, 403, resp.Message{Message: "too many requests"})
+			enc.SendErr(w, errs.ErrTooManyRequests)
 			return
 		}
 		next.ServeHTTP(w, r)

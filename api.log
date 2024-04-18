@@ -23,3 +23,22 @@
 @time="2024-04-17 15:01:32" lvl=error msg="SQL Query Error" err="pq: relation \"car\" does not exist"
 @time="2024-04-17 15:05:32" lvl=info msg="Server is shutting down..."
 @time="2024-04-17 15:05:32" lvl=info msg="Server exiting"
+@time="2024-04-18 05:59:29" lvl=info msg="db conn ok" dsn="postgres@localhost:5432/mydb"
+@time="2024-04-18 05:59:29" lvl=info msg="server started" addr=":9090"
+@time="2024-04-18 05:59:57" lvl=info msg="received request" method=GET url=/api/v1/cars
+@time="2024-04-18 06:00:02" lvl=info msg="received request" method=GET url=/api/v1/carsl
+@time="2024-04-18 06:00:42" lvl=info msg="Server is shutting down..."
+@time="2024-04-18 06:00:42" lvl=info msg="Server exiting"
+@time="2024-04-18 06:00:59" lvl=info msg="db conn ok" dsn="postgres@localhost:5432/mydb"
+@time="2024-04-18 06:00:59" lvl=info msg="server started" addr=":9090"
+@time="2024-04-18 06:01:04" lvl=info msg="received request" method=GET url=/api/v1/carsl
+@time="2024-04-18 06:22:48" lvl=info msg="Server is shutting down..."
+@time="2024-04-18 06:22:48" lvl=info msg="Server exiting"
+@time="2024-04-18 06:23:01" lvl=info msg="db conn ok" dsn="postgres@localhost:5432/mydb"
+@time="2024-04-18 06:23:01" lvl=info msg="server started" addr=":9090"
+@time="2024-04-18 06:23:03" lvl=info msg="received request" method=GET url=/api/v1/cars
+@time="2024-04-18 06:23:07" lvl=info msg="received request" method=GET url=/api/v1/cars/1
+@time="2024-04-18 06:23:09" lvl=info msg="received request" method=GET url=/api/v1/cars/3
+@time="2024-04-18 06:23:11" lvl=info msg="received request" method=GET url=/api/v1/cars/100
+@time="2024-04-18 06:23:30" lvl=info msg="Server is shutting down..."
+@time="2024-04-18 06:23:30" lvl=info msg="Server exiting"

@@ -3,15 +3,15 @@ package usecase
 import (
 	"context"
 	dm "helloWRLDs/bookings/internal/cars/domain"
-	"helloWRLDs/bookings/pkg/types"
 	ctx "helloWRLDs/bookings/pkg/types/context"
 	rsp "helloWRLDs/bookings/pkg/types/responses"
+	errs "helloWRLDs/bookings/pkg/web/errors"
 )
 
 type CarsUseCase interface {
-	GetCars(ctx ctx.Context, filters dm.Filters) (*rsp.Pagination, *types.Error)
-	GetCar(ctx context.Context, id int) (*dm.Car, *types.Error)
-	InsertCar(ctx context.Context, car *dm.Car) (int, *types.Error)
-	DeleteCar(ctx context.Context, id int) *types.Error
-	UpdateCar(ctx context.Context, id int, car *dm.Car) (*dm.Car, *types.Error)
+	GetCars(ctx ctx.Context, filters dm.Filters) (*rsp.Pagination, *errs.Error)
+	GetCar(ctx context.Context, id int) (*dm.Car, *errs.Error)
+	InsertCar(ctx context.Context, car *dm.Car) (int, *errs.Error)
+	DeleteCar(ctx context.Context, id int) *errs.Error
+	UpdateCar(ctx context.Context, id int, car *dm.Car) (*dm.Car, *errs.Error)
 }

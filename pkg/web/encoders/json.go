@@ -1,4 +1,4 @@
-package web
+package encoders
 
 import (
 	"encoding/json"
@@ -14,10 +14,10 @@ func DecodeJson[T any](r *http.Request) (T, error) {
 	return v, nil
 }
 
-func EncodeJson(w http.ResponseWriter, status int, v interface{}) error {
+func EncodeJson(w http.ResponseWriter, status int, entity interface{}) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
-	if err := json.NewEncoder(w).Encode(v); err != nil {
+	if err := json.NewEncoder(w).Encode(entity); err != nil {
 		return fmt.Errorf("error encoding json: %w", err)
 	}
 	return nil

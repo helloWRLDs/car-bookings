@@ -1,4 +1,4 @@
-package types
+package errors
 
 type Error struct {
 	err  string
