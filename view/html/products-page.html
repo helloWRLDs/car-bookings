@@ -14,13 +14,39 @@
         <section class="container mx-auto">
             fds
         </section>
+        <section class="container mx-auto mb-10">
+            <form class="">
+                <label for="filter">Filter: </label>
+                <input type="text" name="filter" id="filter" placeholder="e.g. Corolla">
+
+                <label for="color">Color: </label>
+                <select name="color" id="color">
+                    <option value="">--Select Color--</option>
+                    <option value="Black">Black</option>
+                    <option value="Green">Green</option>
+                    <option value="Blue">Blue</option>
+                    <option value="White">White</option>
+                    <option value="Red">Red</option>
+                </select>
+                <button id="searchBtn" class="text-white bg-blue-500 hover:bg-blue-700 px-7 py-2">Find</button>
+            </form>
+        </section>
         <section class="container mx-auto">
-            <div class="grid grid-cols-3 gap-3">
-                <div>1</div>
-                <div>2</div>
-                <div>3</div>
-                <div>4</div>
-                <div>5</div>
+            <div class="grid grid-cols-4 gap-2" id="offers">
+                
+            </div>
+        </section>
+        <section>
+            <div class="flex justify-center my-8">
+                <nav class="inline-flex">
+                    <a href="#" class="px-3 py-1 bg-gray-200 text-gray-700 rounded-l hover:bg-gray-300">Previous</a>
+                    <a href="#" class="px-3 py-1 bg-blue-500 text-white hover:bg-gray-300">1</a>
+                    <a href="#" class="px-3 py-1 bg-gray-200 text-gray-700 hover:bg-gray-300">2</a>
+                    <a href="#" class="px-3 py-1 bg-gray-200 text-gray-700 hover:bg-gray-300">3</a>
+                    <span class="px-3 py-1 bg-gray-200 text-gray-700">...</span>
+                    <a href="#" class="px-3 py-1 bg-gray-200 text-gray-700 hover:bg-gray-300">10</a>
+                    <a href="#" class="px-3 py-1 bg-gray-200 text-gray-700 rounded-r hover:bg-gray-300">Next</a>
+                </nav>
             </div>
         </section>
     </main>
@@ -28,5 +54,6 @@
         Footer
     </footer>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../js/product-page.js"></script>
 </body>
 </html>
