@@ -23,7 +23,7 @@ func ExtractFilters(r *http.Request) *Filters {
 		limit, _   = strconv.Atoi(r.URL.Query().Get("limit"))
 		offset, _  = strconv.Atoi(r.URL.Query().Get("offset"))
 		sort       = r.URL.Query().Get("sort")
-		filter     = "%%"
+		filter     = "'%%'"
 		filterType = "model"
 	)
 	validateFilters(r.URL.Query(), &limit, &offset, &sort, &order, &filter, &filterType)
